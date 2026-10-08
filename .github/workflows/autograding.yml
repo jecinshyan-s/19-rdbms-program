@@ -1,0 +1,32 @@
+name: PL-SQL Autograding
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  autograding:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Check Required Files
+        run: |
+          test -f README.md
+          test -f starter.sql
+          test -f solution.sql
+          test -f test.sql
+          test -f .github/workflows/autograding.yml
+          echo "All required files are present."
+
+      - name: Verify Cursor Program
+        run: |
+          grep -qi "CURSOR student_cursor" solution.sql
+          grep -qi "SELECT StudentID, StudentName, DepartmentID" solution.sql
+          grep -qi "OPEN student_cursor" solution.sql
+          grep -qi "FETCH student_cursor" solution.sql
+          grep -qi "CLOSE student_cursor" solution.sql
+          grep -qi "DBMS_OUTPUT.PUT_LINE" solution.sql
+          echo "PL/SQL cursor program verified successfully."
